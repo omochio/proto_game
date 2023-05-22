@@ -1,6 +1,7 @@
 import sys
 import pygame as pg
-import player
+import modules.player as mdl_player
+import modules.block as mdl_block
 
 WIDTH = 1024
 HEIGHT = 1024
@@ -12,7 +13,10 @@ def main():
     bg_img = pg.Surface((WIDTH, HEIGHT))
     bg_img.fill((0, 0, 0))
 
-    plr = player.Player((500, 500))
+    player = mdl_player.Player((500, 500))
+    blocks = pg.sprite.Group()
+    for i in range(32):
+        blocks.add(mdl_block.Block((i * mdl_block.Block.size[0], HEIGHT)))
 
     tmr = 0
     clock = pg.time.Clock()
@@ -22,10 +26,11 @@ def main():
                 return 0
         
         screen.blit(bg_img, (0, 0))
+        blocks.draw(screen)
 
         key_lst = pg.key.get_pressed()
 
-        plr.update(key_lst, screen)
+        player.update(key_lst, screen, blocks)
         pg.display.update()
 
         tmr += 1
